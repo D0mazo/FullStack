@@ -1,47 +1,50 @@
 'use strict';
 
 const express = require('express');
-const { request } = require('http');
 const morgan = require('morgan');
-const cors = require('cors')
+const cors = require('cors');
 const app = express();
-const port = 3000
+const port = 3000;
 
 const users = [
-  { id: 1, name:'James', town:"London"},
-  { id: 2, name:'Bob', town:"Londo"},
-  { id: 3, name:'Luke', town:"Lond"},
-  { id: 4, name:'Jane', town:"Lon"}
-  
+  { id: 1, name: 'James', town: "London" },
+  { id: 2, name: 'Bob', town: "Londo" },
+  { id: 3, name: 'Luke', town: "Lond" },
+  { id: 4, name: 'Jane', town: "Lon" }
 ];
 
-//midleware
+// middleware
 app.use(morgan("dev"));
 app.use(cors()); // to fix cors error
 
-//Routes
+// Routes
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-//post - add
+// post - add
 
-
-//grazinti visus
+// return all users
 app.get('/api/users', (request, response) => {
   response.json(users);
 });
 
-//konkretu
+// return specific user by ID
 app.get('/api/users/:userId', (request, response) => {
-  console.log("request.params ===", request.params);
-  const userId = +request.params.userId; // Fix the typo here
-  //surasti objekta su id === userId, ir ji grazinti;
+  const userId = +request.params.userId;
+
+  // find user by ID
   const found = users.find((userObj) => userId === userObj.id);
-  console.log('found ===', found);
-  response.json('trying to get single post');
+
+  // if user not found, send 404 status
+  if (!found) {
+    response.status(404).json({ error: 'User not found' });
+    return;
+  }
+
+  response.json(found);
 });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})
+});
