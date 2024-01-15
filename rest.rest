@@ -1,0 +1,12 @@
+GET http://localhost:3000/
+
+###
+
+//visi users
+GET http://localhost:3000/api/users
+
+###
+//konkretus
+GET http://localhost:3000/api/users/2
+
+###
